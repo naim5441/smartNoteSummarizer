@@ -41,7 +41,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-12">
           <div class="jumbotron">
-            <h1 class="display-4 text-center">Note Taker Summary</h1>
+            <h1 class="display-4 text-center">SmartNote Summarizer</h1>
             <p class="lead text-center">
               Upload your document image and let our AI summarize.
             </p>
@@ -223,6 +223,10 @@
         $("#image").on("change", function () {
           $("#faq").show();
           $("#results").hide().empty();
+          // Get the file name
+          var fileName = $(this).val().split("\\").pop();
+          // Replace the "Choose image" label
+          $(this).next(".custom-file-label").html(fileName);
         });
       });
     </script>

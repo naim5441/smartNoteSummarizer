@@ -26,7 +26,7 @@ if (saveUploadedImg) {
 export const upload = multer({
   storage: storage, // use diskStorage configuration
   limits: {
-    fileSize: maxImgSize * 1024 * 1024, // limit file size to 5MB
+    fileSize: maxImgSize * 1024 * 1024,
   },
   fileFilter: function (
     req: express.Request,
