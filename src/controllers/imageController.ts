@@ -5,8 +5,6 @@ import { openApi } from "../services/openAIService";
 import { ocrComputerVision } from "../services/visionService";
 import { saveUploadedImg } from "./uploadController";
 
-const HOST = process.env.NGROK_URL;
-
 if (!process.env.MICROSOFT_COMPUTER_VISION_ENDPOINT) {
   throw new Error("MICROSOFT_COMPUTER_VISION_ENDPOINT is not set");
 }

@@ -10,6 +10,5 @@
         "uri": "MONGO_URI",
         "keyName": "MONGO_KEY_NAME",
         "apiKey": "MONGO_API_KEY"
-    },
-    "ngrokUrl": "process.env.NGROK_URL"
+    }
 }
