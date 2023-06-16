@@ -212,8 +212,9 @@
             error: function (xhr, status, error) {
               // Hide loading screen in case of error
               $("#loadingScreen").hide();
-              // You may want to handle the error in a user-friendly way
-              console.error("Upload failed:", error);
+              $("#faq").show();
+              console.error("Upload failed:", xhr.responseText);
+              alert("Upload failed: " + xhr.responseJSON.error);
             },
           });
         });

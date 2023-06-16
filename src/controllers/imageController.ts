@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import fs from "fs";
+import path from "path";
 import { openApi } from "../services/openAIService";
 import { ocrComputerVision } from "../services/visionService";
+import { saveUploadedImg } from "./uploadController";
 
 const HOST = process.env.NGROK_URL;
 
@@ -13,15 +16,24 @@ export const processImage = async (req: Request, res: Response) => {
     res.status(400).send("You must upload the image before proceeding");
     return;
   }
-  const fileName = req.file.filename;
-  let imageUrl = `${HOST}/uploads/${fileName}`;
-  if (!imageUrl) {
-    res.status(500).send("Missing Image Url");
+
+  let imageData;
+
+  if (saveUploadedImg) {
+    const filePath = path.join(__dirname, "../../uploads", req.file.filename);
+    imageData = fs.readFileSync(filePath).toString("base64");
+  } else {
+    // Image is in memory
+    imageData = req.file.buffer.toString("base64");
+  }
+
+  if (!imageData) {
+    res.status(500).send("Missing Image Data");
     return;
   }
 
   try {
-    const image_text = await ocrComputerVision(imageUrl);
+    const image_text = await ocrComputerVision(imageData); // pass base64 string to ocrComputerVision
     const summarize_text = await openApi(image_text);
     //await saveNote("Note Title", summarize_text);
     res.json({ text: summarize_text });
