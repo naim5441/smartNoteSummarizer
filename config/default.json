@@ -1,0 +1,15 @@
+{
+    "microsoftVision": {
+        "subscriptionKey": "",
+        "endpoint": ""
+    },
+    "openai": {
+        "apiKey": ""
+    },
+    "mongodb": {
+        "uri": "",
+        "keyName": "",
+        "apiKey": ""
+    },
+    "ngrokUrl": ""
+}

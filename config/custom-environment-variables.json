@@ -1,0 +1,15 @@
+{
+    "microsoftVision": {
+        "subscriptionKey": "MICROSOFT_COMPUTER_VISION_SUBSCRIPTION_KEY",
+        "endpoint": "MICROSOFT_COMPUTER_VISION_ENDPOINT"
+    },
+    "openai": {
+        "apiKey": "OPEN_AI_API_KEY"
+    },
+    "mongodb": {
+        "uri": "MONGO_URI",
+        "keyName": "MONGO_KEY_NAME",
+        "apiKey": "MONGO_API_KEY"
+    },
+    "ngrokUrl": "process.env.NGROK_URL"
+}

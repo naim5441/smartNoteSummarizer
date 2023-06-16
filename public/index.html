@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Image Summarization</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+    />
+    <style>
+      #results {
+        background-color: #e8f4f8;
+        padding: 20px;
+        border-radius: 10px;
+      }
+      #loadingScreen {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+      }
+
+      #loadingMessage {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container my-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-12">
+          <div class="jumbotron">
+            <h1 class="display-4 text-center">Note Taker Summary</h1>
+            <p class="lead text-center">
+              Upload your document image and let our AI summarize.
+            </p>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+              <form
+                id="uploadForm"
+                action="/upload"
+                method="post"
+                enctype="multipart/form-data"
+              >
+                <div class="custom-file mb-3">
+                  <input
+                    type="file"
+                    class="custom-file-input"
+                    id="image"
+                    name="image"
+                  />
+                  <label class="custom-file-label" for="image"
+                    >Choose image</label
+                  >
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">
+                  Upload
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div id="results" class="mt-4">
+            <!-- The processed text results from the image will go here -->
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div id="faq" class="mt-4">
+            <h2 class="mb-3">Frequently Asked Questions</h2>
+
+            <div class="accordion" id="faqList">
+              <div class="card">
+                <div class="card-header" id="headingOne">
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseOne"
+                      aria-expanded="true"
+                      aria-controls="collapseOne"
+                    >
+                      What file formats are accepted?
+                    </button>
+                  </h5>
+                </div>
+
+                <div
+                  id="collapseOne"
+                  class="collapse show"
+                  aria-labelledby="headingOne"
+                  data-parent="#faqList"
+                >
+                  <div class="card-body">
+                    We accept image files in JPEG, PNG, GIF and BMP formats.
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header" id="headingTwo">
+                  <h5 class="mb-0">
+                    <button
+                      class="btn btn-link collapsed"
+                      type="button"
+                      data-toggle="collapse"
+                      data-target="#collapseTwo"
+                      aria-expanded="false"
+                      aria-controls="collapseTwo"
+                    >
+                      What is the maximum file size?
+                    </button>
+                  </h5>
+                </div>
+
+                <div
+                  id="collapseTwo"
+                  class="collapse"
+                  aria-labelledby="headingTwo"
+                  data-parent="#faqList"
+                >
+                  <div class="card-body">The maximum file size is 4MB.</div>
+                </div>
+              </div>
+
+              <!-- ... End Fags... -->
+            </div>
+          </div>
+          <!-- Loading Screen -->
+          <div id="loadingScreen">
+            <div id="loadingMessage">Please wait..summarizing for you!</div>
+          </div>
+          <!-- End Loading Screen -->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#results").hide();
+        $("#uploadForm").on("submit", function (e) {
+          e.preventDefault();
+          $("#faq").hide();
+          const formData = new FormData(this);
+
+          // Show loading screen
+          $("#loadingScreen").show();
+
+          $.ajax({
+            type: "POST",
+            url: "/upload",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+              $("#results").show();
+              const summary = data.text; // assuming the response structure
+
+              let formattedSummary = summary.replace(
+                /(Title:\s.*|Key Elements:\s.*)/g,
+                "<strong>$1</strong>"
+              );
+              $("#results").append(`
+                    <div>
+                        <h2 style="text-align: center;">Summary</h2>
+                        <p id="summary">${formattedSummary.replace(
+                          /\n/g,
+                          "<br>"
+                        )}</p>
+                        <button id="download">Download Summary</button>
+                    </div>
+                `);
+
+              $("#download").click(function () {
+                const text = $("#summary").text();
+                const element = document.createElement("a");
+                element.setAttribute(
+                  "href",
+                  "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+                );
+                element.setAttribute("download", "summary.txt");
+
+                element.style.display = "none";
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
+              });
+
+              // show results
+              $("#results").show();
+              // Hide loading screen
+              $("#loadingScreen").hide();
+            },
+            error: function (xhr, status, error) {
+              // Hide loading screen in case of error
+              $("#loadingScreen").hide();
+              // You may want to handle the error in a user-friendly way
+              console.error("Upload failed:", error);
+            },
+          });
+        });
+
+        // show faqs and hide results when a new file is chosen
+        $("#image").on("change", function () {
+          $("#faq").show();
+          $("#results").hide().empty();
+        });
+      });
+    </script>
+  </body>
+</html>
