@@ -19,12 +19,14 @@ export const openApi = async (text: string) => {
   try {
     // Define the instructions for GPT-3
     const instructions = `
-        Given the following text: ${text}, 
-        please:
-            1. Generate a title.
-            2. Identify and bullet point the key elements.
-            3. Summarize the context.
-        Also, please use clear spacing and highlight any particularly important points.
+        Please perform the following tasks with the provided text: '${text}'.
+
+        1. Generate a meaningful title that encapsulates the central theme.
+        2. Identify the key elements or points and list them in bullet form.
+        3. If the text from the image presents a question or a problem, provide a corresponding answer or solution.If not please skip and just proceed with the next step
+        4. Compose a concise summary of the overall context.
+
+        Ensure your response is formatted clearly with appropriate spacing. Please highlight any points of particular importance.
         `;
 
     const gptResponse = await openai.createCompletion({

@@ -176,6 +176,7 @@
                 /(Title:\s.*|Key Elements:\s.*)/g,
                 "<strong>$1</strong>"
               );
+              $("#results").html("");
               $("#results").append(`
                     <div>
                         <h2 style="text-align: center;">Summary</h2>
