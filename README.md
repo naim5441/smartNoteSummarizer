@@ -23,8 +23,13 @@ Note Taker Summary is a web application that summarizes the content of an upload
 
 1. Clone this repository.
 2. Install dependencies with `npm install`.
-3. Run the application in development mode with `npm run dev`.
-4. For production, first compile the application with `npm run build`, then start the application with `npm start`.
+3. Create .env in the root folder and add the following lines, replacing YourValue with your actual values.
+   - MICROSOFT_COMPUTER_VISION_SUBSCRIPTION_KEY=YourValue
+   - MICROSOFT_COMPUTER_VISION_ENDPOINT=YourValue
+   - OPEN_AI_ORGANIZATION_ID=YourValue
+   - OPEN_AI_API_KEY=YourValue
+4. Run the application in development mode with `npm run dev`.
+5. For production, first compile the application with `npm run build`, then start the application with `npm start`.
 
 ### Note
 
