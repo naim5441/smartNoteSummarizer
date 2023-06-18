@@ -1,8 +1,8 @@
-# Note Taker Summary
+# SmartNoteSummarizer
 
 ## Overview
 
-Note Taker Summary is a web application that summarizes the content of an uploaded image. It uses Optical Character Recognition (OCR) and Natural Language Processing (NLP) techniques to analyze and summarize the content of the document.
+SmartNoteSummarizer is a web application that summarizes the content of an uploaded image. It uses Optical Character Recognition (OCR) and Natural Language Processing (NLP) techniques to analyze and summarize the content of the document.
 
 ## Features
 
